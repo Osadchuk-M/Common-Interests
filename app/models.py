@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     avatar_hash = db.Column(db.String(256))
+    interviewed = db.Column(db.Boolean, default=False)
 
     interest = relationship('Interest', uselist=False, back_populates='user')
 

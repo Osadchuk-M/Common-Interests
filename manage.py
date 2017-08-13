@@ -22,14 +22,18 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
 
-# @manager.command
-# def bootstrap():
-#     """ Create database with fake data """
-#     db.create_all()
-#     os.environ['ADMIN_EMAIL'] = 'osadchuk.m.01@gmail.com'
-#     os.environ['ADMIN_PASSWORD'] = '1111'
-#     db.session.add(User(email='osadchuk.m.01@gmail.com', name='Maxim', password='1111'))
-#     db.session.commit()
+@manager.command
+def bootstrap():
+    """ Create database with fake data """
+    db.create_all()
+    os.environ['ADMIN_EMAIL'] = 'osadchuk.m.01@gmail.com'
+    os.environ['ADMIN_PASSWORD'] = '1111'
+    admin = User(email='osadchuk.m.01@gmail.com', username='Maxim', password='1111')
+    admin.gravatar()
+    db.session.commit()
+    db.session.add(admin)
+    User._bootstrap()
+    Interest._bootstrap()
 
 
 if __name__ == '__main__':
