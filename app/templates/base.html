@@ -1,0 +1,41 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Base
+{% endblock title %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ url_for('main.home') }}">Common Interests</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="{{ url_for('main.home') }}">Home</a></li>
+      <li><a href="#">My cabinet</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {% if not current_user.is_authenticated %}
+        <li><a href={{ url_for('auth.register') }}><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="{{ url_for('auth.login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      {% else %}
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Hello, {{ current_user.username }}</a></li>
+        <li><a href="{{ url_for('auth.logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
