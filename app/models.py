@@ -64,6 +64,42 @@ class User(UserMixin, db.Model):
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
 
+    def update_interest_from_form(self, form):
+        self.interest.action = float(form.action.data)
+        self.interest.adventure = float(form.adventure.data)
+        self.interest.animation = float(form.animation.data)
+        self.interest.childrens = float(form.childrens.data)
+        self.interest.comedy = float(form.comedy.data)
+        self.interest.crime = float(form.crime.data)
+        self.interest.documentary = float(form.documentary.data)
+        self.interest.drama = float(form.drama.data)
+        self.interest.fantasy = float(form.fantasy.data)
+        self.interest.horror = float(form.horror.data)
+        self.interest.musical = float(form.musical.data)
+        self.interest.mystery = float(form.mystery.data)
+        self.interest.romance = float(form.romance.data)
+        self.interest.science = float(form.science.data)
+        self.interest.thriller = float(form.thriller.data)
+        self.interest.war = float(form.war.data)
+        self.interest.western = float(form.western.data)
+
+    def calculate(self):
+        from math import pow, sqrt
+        from operator import itemgetter
+
+        result = []
+        users = User.query.all()
+        users_interest = [user.interest for user in users if user.id != self.id]
+        for interest in users_interest:
+            distance = 0
+            for col in Interest.__table__.columns:
+                if col.key != 'id':
+                    distance += pow(self.interest.__dict__[col.key] - interest.__dict__[col.key], 2)
+            distance = sqrt(distance)
+            result.append((interest.user.username, distance))
+        result.sort(key=itemgetter(1))
+        return result
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -110,7 +146,7 @@ class Interest(db.Model):
         from sqlalchemy.exc import IntegrityError
         from random import choice
         choices = [0.5, 1, 1.5, 2, 2.5, 3.0, 3.5, 4.0, 4.5, 5]
-        for i in range(1, User.query.count()+1):
+        for i in range(1, User.query.count() + 1):
             i = Interest(
                 user_id=i,
                 action=choice(choices),
