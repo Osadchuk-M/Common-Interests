@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %} user {{ user.username }} {% endblock title %}
+{% block title %} {{ user_1.username }} | {{ user_2.username }} {% endblock title %}
 
 {% block page_content %}
     <div class="page-header text-center">
-        <h1>{{ user.username }} <a href="{{ url_for('main.comparison', username=user.username) }}">(compare with me)</a></h1>
+        <h1>Comparison of {{ user_1.username }} and {{ user_2.username }} interests</h1>
     </div>
 
-        <div class="col-md-offset-3 col-md-6">
-            <table class="table table-stripped">
+    <div class="col-md-offset-3 col-md-6">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Genre</th>
-                        <th>Rating</th>
+                        <th>{{ user_1.username }}</th>
+                        <th>{{ user_2.username }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,7 +21,8 @@
                         {% if col.key != 'user_id' and col.key != 'id' %}
                             <tr>
                                 <th>{{ col.key }}</th>
-                                <th>{{ user.interest.__dict__[col.key] }}</th>
+                                <th>{{ user_1.interest.__dict__[col.key] }}</th>
+                                <th>{{ user_2.interest.__dict__[col.key] }}</th>
                             </tr>
                         {% endif %}
                     {% endfor %}

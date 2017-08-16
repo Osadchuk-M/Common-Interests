@@ -11,7 +11,9 @@ from .forms import PollForm
 @login_required
 @interviewed
 def home():
-    return render_template('index.html')
+    user = current_user._get_current_object()
+    distances = user.calculate()
+    return render_template('index.html', user=user, distances=distances)
 
 
 @main.route('/poll', methods=['GET', 'POST'])
@@ -30,15 +32,18 @@ def poll():
 
 @main.route('/user/<username>')
 @login_required
+@interviewed
 def user_page(username):
     user = User.query.filter_by(username=username).first()
     columns = Interest.__table__.columns
     return render_template('user.html', user=user, columns=columns)
 
 
-@main.route('/distances/<username>')
+@main.route('/comparison/<username>')
 @login_required
-def dist_table(username):
-    user = User.query.filter_by(username=username).first()
-    distances = user.calculate()
-    return render_template('distance.html', user=user, distances=distances)
+@interviewed
+def comparison(username):
+    user_1 = current_user._get_current_object()
+    user_2 = User.query.filter_by(username=username).first()
+    columns = Interest.__table__.columns
+    return render_template('comparison.html', user_1=user_1, user_2=user_2, columns=columns)

@@ -13,7 +13,6 @@
     <ul class="nav navbar-nav">
       <li><a href="{{ url_for('main.home') }}">Home</a></li>
       <li><a href={{ url_for('main.user_page', username=current_user.username) }}>My cabinet</a></li>
-      <li><a href={{ url_for('main.dist_table', username=current_user.username) }}>Diff table</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       {% if not current_user.is_authenticated %}
