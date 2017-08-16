@@ -93,10 +93,10 @@ class User(UserMixin, db.Model):
         for interest in users_interest:
             distance = 0
             for col in Interest.__table__.columns:
-                if col.key != 'user_id':
+                if col.key != 'user_id' and col.key != 'id':
                     distance += pow(self.interest.__dict__[col.key] - interest.__dict__[col.key], 2)
             distance = sqrt(distance)
-            result.append((interest.user.username, distance))
+            result.append((interest.user.username, round(distance, 2)))
         result.sort(key=itemgetter(1))
         return result
 
