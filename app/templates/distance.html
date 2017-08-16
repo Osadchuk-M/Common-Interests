@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} difference for {{ user.username }} {% endblock %}
+
+{% block page_content %}
+    <div class="page-header text-center">
+        <h1>Distance from {{ user.username }}</h1>
+    </div>
+
+        <div class="col-md-offset-3 col-md-6">
+            <table class="table table-stripped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Distance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in distances %}
+                        <tr>
+                            <th><a href={{ url_for('main.user_page', username=row[0]) }}>{{ row[0] }}</a></th>
+                            <th>{{ row[1] }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+{% endblock page_content %}
