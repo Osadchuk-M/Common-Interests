@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from ..decorators import interviewed, not_interviewed
+from ..models import Interest, User
 from . import main
 from .forms import PollForm
 
@@ -25,3 +26,19 @@ def poll():
         flash('Your interest has been saved.')
         return redirect(url_for('main.home'))
     return render_template('poll.html', form=form)
+
+
+@main.route('/user/<username>')
+@login_required
+def user_page(username):
+    user = User.query.filter_by(username=username).first()
+    columns = Interest.__table__.columns
+    return render_template('user.html', user=user, columns=columns)
+
+
+@main.route('/distances/<username>')
+@login_required
+def dist_table(username):
+    user = User.query.filter_by(username=username).first()
+    distances = user.calculate()
+    return render_template('distance.html', user=user, distances=distances)
